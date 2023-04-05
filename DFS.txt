@@ -1,0 +1,25 @@
+graph = {
+  '5' : ['3','7'],
+  '3' : ['2', '4'],
+  '7' : ['8'],
+  '2' : [],
+  '4' : ['8'],
+  '8' : []
+}
+v=[]
+s=[]
+def dsearch(v,graph, node):
+    print(node,end="->")
+    v.append(node)
+    s.extend(graph[node])
+ 
+  
+    while s:
+        
+        p=s.pop()
+        if p in v:
+            p=s.pop()
+        dsearch(v,graph, p)
+        
+        
+dsearch(v,graph,'5')
