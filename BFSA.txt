@@ -1,0 +1,32 @@
+# bfs
+graph={
+    0:[1,2],
+    1:[2],
+    2:[0,3],
+    3:[3]
+}
+print(graph)
+k=list(graph.keys())
+visted={}
+for i in range (0,len(graph)):
+    visted[k[i]]="F"
+print(visted)
+q=[]
+
+def bfs (node,q):
+    if(visted[node]=='F'):
+        visted[node]="t"
+        q.extend(graph[node])
+        x=q[0]
+        q.pop(0)
+        print(node,end='->')
+        bfs(x,q)
+    elif(q==[]):
+        exit
+    else:
+        
+        x=q[0]
+        q.pop()
+        bfs(x,q)
+bfs(2,q)
+print()

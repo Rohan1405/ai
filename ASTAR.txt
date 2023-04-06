@@ -1,0 +1,56 @@
+import heapq
+
+def heuristic(node, goal):
+    """Heuristic function for A* algorithm."""
+    # Manhatten distance
+    return abs(node[0] - goal[0]) + abs(node[1] - goal[1])
+
+def astar(start, goal, graph):
+    """A* algorithm."""
+    # Initialize data structures
+    frontier = [(heuristic(start, goal), start)]
+    came_from = {}
+    cost_so_far = {start: 0}
+
+    while frontier:
+        # Get node with lowest estimated cost
+        current_cost, current_node = heapq.heappop(frontier)
+
+        if current_node == goal:
+            # Goal node reached, reconstruct path
+            path = [current_node]
+            while current_node != start:
+                current_node = came_from[current_node]
+                path.append(current_node)
+            return list(reversed(path))
+
+        # Explore neighbors
+        for neighbor_node, neighbor_cost in graph[current_node].items():
+            new_cost = cost_so_far[current_node] + neighbor_cost
+            if neighbor_node not in cost_so_far or new_cost < cost_so_far[neighbor_node]:
+                cost_so_far[neighbor_node] = new_cost
+                priority = new_cost + heuristic(neighbor_node, goal)
+                heapq.heappush(frontier, (priority, neighbor_node))
+                came_from[neighbor_node] = current_node
+
+    # Goal node not reached, no path exists
+    return None
+# Example usage
+graph = {
+    (0, 0): {(0, 1): 1, (1, 0): 1},
+    (0, 1): {(0, 0): 1, (0, 2): 1, (1, 1): 1},
+    (0, 2): {(0, 1): 1, (1, 2): 1},
+    (1, 0): {(0, 0): 1, (1, 1): 1, (2, 0): 1},
+    (1, 1): {(0, 1): 1, (1, 0): 1, (1, 2): 1, (2, 1): 1},
+    (1, 2): {(0, 2): 1, (1, 1): 1, (2, 2): 1},
+    (2, 0): {(1, 0): 1, (2, 1): 1},
+    (2, 1): {(1, 1): 1, (2, 0): 1, (2, 2): 1},
+    (2, 2): {(1, 2): 1, (2, 1): 1}
+}
+
+start_node = (0, 0)
+goal_node = (2, 2)
+
+path = astar(start_node, goal_node, graph)
+
+print("Path:", path)
