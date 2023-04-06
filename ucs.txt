@@ -1,0 +1,40 @@
+ucs
+import heapq
+graph={
+    "0":{"1":2 , "3":5},
+    "1":{ "6":1},
+    "2":{ "1":4},
+    "3":{ "1":5, "6":6, "4":2},
+    "4":{ "2":4, "5":3},
+    "5":{ "2":6,  "6":3},
+    "6":{ "4":7}
+}
+
+def ucs(graph, start, goal):
+    frontier = [(0, start, [])]
+    explored = set()
+    while frontier:
+        (cost, node, path) = heapq.heappop(frontier)
+        if node == goal:
+            return path + [node]
+        if node not in explored:
+            explored.add(node)
+            for (next_node, next_cost) in graph[node].items():
+                if next_node not in explored:
+                    total_cost = cost + next_cost
+                    next_path = path + [node]
+                    heapq.heappush(frontier, (total_cost, next_node, next_path))
+    
+
+path = ucs(graph,'0','6')
+
+print(path)
+
+total_cost = 0
+for i in range(len(path)-1):
+    curr_node = path[i]
+    next_node = path[i+1]
+    edge_cost = graph[curr_node][next_node]
+    total_cost += edge_cost
+    
+print (total_cost)
